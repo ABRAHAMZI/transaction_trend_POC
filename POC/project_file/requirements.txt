@@ -6,4 +6,4 @@ streamlit
 bcrypt
 tensorflow
 matplotlib
-dotenv
+python-dotenv

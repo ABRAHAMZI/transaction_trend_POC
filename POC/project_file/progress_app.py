@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import linregress
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping  # Import EarlyStopping
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
 import os
@@ -68,16 +69,25 @@ def run_lstm_model():
 
     # Streamlit elements for displaying progress and loss
     st.write("Training the model...")
-    epochs = 30
+    epochs = 50
+    batch_size = 90
     progress_bar = st.progress(0)
     loss_placeholder = st.empty()
 
+    # Early stopping callback
+    early_stopping = EarlyStopping(monitor='loss', patience=5, restore_best_weights=True)
+
     # Custom training loop to display loss after each epoch
     for epoch in range(epochs):
-        history = model.fit(X, y, epochs=1, batch_size=180, verbose=0)  # Train for 1 epoch at a time
+        history = model.fit(X, y, epochs=1, batch_size=batch_size, verbose=0, callbacks=[early_stopping])  # Use early stopping
         loss = history.history['loss'][0]
         progress_bar.progress((epoch + 1) / epochs)
-        loss_placeholder.write(f"Epoch {epoch + 1}/{epochs}, Loss: {loss:.4f}")
+        loss_placeholder.write(f"Epoch {epoch + 1}/{epochs}, Loss: {loss}")
+
+        # Stop if early stopping is triggered
+        if early_stopping.stopped_epoch > 0:
+            st.write(f"Early stopping triggered at epoch {epoch + 1}.")
+            break
 
     # Number of future predictions
     n_future = 90

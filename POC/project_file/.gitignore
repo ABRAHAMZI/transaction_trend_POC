@@ -1,6 +1,6 @@
 # cred.env
 
-__pycache__/
-*.__pyc
+# __pycache__/
+# *.__pyc
 
-.vscode/
+# .vscode/

@@ -1,9 +1,0 @@
-pandas
-numpy
-scikit-learn
-scipy
-streamlit
-bcrypt
-tensorflow
-matplotlib
-python-dotenv
